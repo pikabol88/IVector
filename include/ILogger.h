@@ -1,5 +1,6 @@
 #pragma once
 #include "RC.h"
+#include "Interfacedllexport.h"
 
 /*
 * Defines for comfortable logging with information about caller
@@ -7,15 +8,15 @@
 
 /*
 #define SendLog(Logger, Code, Level) Logger->log((Code), (Level), __FILE__, __func__, __LINE__)
-#define SendSever(Logger, Code) Logger->sever((Code), __FILE__, __func__, __LINE__)
+#define SendSevere(Logger, Code) Logger->severe((Code), __FILE__, __func__, __LINE__)
 #define SendWarning(Logger, Code) Logger->warning((Code), __FILE__, __func__, __LINE__)
 #define SendInfo(Logger, Code) Logger->info((Code), __FILE__, __func__, __LINE__)
 */
 
-class ILogger {
+class LIB_EXPORT ILogger {
 public:
     enum class Level {
-        SEVER,   // Critical error that prevents application from running further
+        SEVERE,   // Critical error that prevents application from running further
         WARNING, // Non-critical error
         INFO     // Optional information
     };
@@ -60,17 +61,17 @@ public:
     virtual RC log(RC code, Level level) = 0;
 
     /*
-    * Same as log() but Level == SEVER
+    * Same as log() but Level == SEVERE
     */
-    virtual RC sever(RC code, const char* const& srcfile, const char* const& function, int line) {
-        return log(code, Level::SEVER, srcfile, function, line);
+    virtual RC severe(RC code, const char* const& srcfile, const char* const& function, int line) {
+        return log(code, Level::SEVERE, srcfile, function, line);
     };
 
     /*
-    * Same as sever() but without information about caller
+    * Same as severe() but without information about caller
     */
-    virtual RC sever(RC code) {
-        return log(code, Level::SEVER);
+    virtual RC severe(RC code) {
+        return log(code, Level::SEVERE);
     };
 
     /*
@@ -104,8 +105,8 @@ public:
     virtual ~ILogger() = 0;
 
 private:
-    ILogger(const ILogger &);
-    ILogger &operator=(const ILogger &);
+    ILogger(const ILogger &) = delete;
+    ILogger &operator=(const ILogger &) = delete;
 
 protected:
     ILogger() = default;
